@@ -11,21 +11,15 @@ class ListViewController: UITableViewController {
     
     var tasks = [Task]()
     let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Tasks.plist")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tasks.append(Task(title: "Cook diner" ,isCompleted: false))
-        tasks.append(Task(title: "Online meatig" ,isCompleted: true))
-        tasks.append(Task(title: "Clean room" ,isCompleted: false))
-        
-        
-        if let items = defaults.array(forKey: K.userDefaultsKey) as? [Task]{
-            tasks = items
-        }
-        
+        loadTask()
     }
     
+    //MARK: - Alert controller region
     @IBAction func addBtnPressed(_ sender: UIBarButtonItem) {
         //init alert
         let alert = UIAlertController(title: "Add new task", message: "", preferredStyle: .alert)
@@ -40,21 +34,38 @@ class ListViewController: UITableViewController {
         
         //adding action to alert
         let action = UIAlertAction(title: "add", style: .default, handler: {(action) in
-            
-            var taskName = textField.text!
-            
-            if(taskName.isEmpty){
-                taskName = K.defaultTaskName
-            }
-            
+            let taskName = textField.text!.isEmpty ? K.defaultTaskName:textField.text!
             self.tasks.append(Task(title: taskName, isCompleted: false))
-            self.defaults.set(self.tasks, forKey: K.userDefaultsKey)
+            self.storeNewTask()
             self.tableView.reloadData()
         })
         alert.addAction(action)
         
         //show alert
         present(alert, animated: true, completion: nil)
+    }
+    
+    func storeNewTask() {
+        let encoder = PropertyListEncoder()
+        
+        do{
+            let data = try encoder.encode(tasks)
+            try data.write(to: dataFilePath!)
+        }catch{
+            print(error)
+        }
+    }
+    
+    func loadTask(){
+        if let data = try? Data(contentsOf: dataFilePath!){
+            let decoder = PropertyListDecoder()
+            do{
+                tasks = try decoder.decode([Task].self, from: data)
+            }catch{
+                print(error)
+            }
+        }
+        
     }
     
     //MARK: - TableView
@@ -80,7 +91,7 @@ class ListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tasks[indexPath.row].isCompleted = !tasks[indexPath.row].isCompleted
-        
+        storeNewTask()
         tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
