@@ -10,9 +10,14 @@ import UIKit
 class ListViewController: UITableViewController {
     
     var tasks = ["Cook diner","Clean house", "Buy food"]
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let items = defaults.array(forKey: K.userDefaultsKey) as? [String]{
+            tasks = items
+        }
         
     }
     
@@ -58,11 +63,16 @@ class ListViewController: UITableViewController {
         
         //adding action to alert
         let action = UIAlertAction(title: "add", style: .default, handler: {(action) in
-            if(!textField.text!.isEmpty){
-                self.tasks.append(textField.text!)
-            }else{
-                self.tasks.append("New task created")
+            
+            var taskName = textField.text!
+            
+            if(taskName.isEmpty){
+                taskName = K.defaultTaskName
             }
+        
+            self.tasks.append(taskName)
+
+            self.defaults.set(self.tasks, forKey: K.userDefaultsKey)
             
             self.tableView.reloadData()
         })
