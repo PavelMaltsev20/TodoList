@@ -8,6 +8,6 @@
 import Foundation
 
 struct Task {
-    let title: String
-    var isCompleted: Bool
+    var title: String = ""
+    var isCompleted: Bool = false
 }
