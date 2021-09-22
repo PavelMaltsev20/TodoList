@@ -9,21 +9,23 @@
 /* Begin PBXBuildFile section */
 		CE51B17E26FB3E62001B0832 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE51B17D26FB3E62001B0832 /* AppDelegate.swift */; };
 		CE51B18026FB3E62001B0832 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE51B17F26FB3E62001B0832 /* SceneDelegate.swift */; };
-		CE51B18226FB3E62001B0832 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE51B18126FB3E62001B0832 /* ViewController.swift */; };
+		CE51B18226FB3E62001B0832 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE51B18126FB3E62001B0832 /* ListViewController.swift */; };
 		CE51B18526FB3E62001B0832 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE51B18326FB3E62001B0832 /* Main.storyboard */; };
 		CE51B18726FB3E67001B0832 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE51B18626FB3E67001B0832 /* Assets.xcassets */; };
 		CE51B18A26FB3E67001B0832 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE51B18826FB3E67001B0832 /* LaunchScreen.storyboard */; };
+		CE51B19226FB4D0E001B0832 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE51B19126FB4D0E001B0832 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		CE51B17A26FB3E62001B0832 /* TodoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE51B17D26FB3E62001B0832 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE51B17F26FB3E62001B0832 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CE51B18126FB3E62001B0832 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CE51B18126FB3E62001B0832 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		CE51B18426FB3E62001B0832 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE51B18626FB3E67001B0832 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE51B18926FB3E67001B0832 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE51B18B26FB3E67001B0832 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE51B19126FB4D0E001B0832 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,9 +58,10 @@
 		CE51B17C26FB3E62001B0832 /* TodoList */ = {
 			isa = PBXGroup;
 			children = (
+				CE51B19126FB4D0E001B0832 /* Constants.swift */,
 				CE51B17D26FB3E62001B0832 /* AppDelegate.swift */,
 				CE51B17F26FB3E62001B0832 /* SceneDelegate.swift */,
-				CE51B18126FB3E62001B0832 /* ViewController.swift */,
+				CE51B18126FB3E62001B0832 /* ListViewController.swift */,
 				CE51B18326FB3E62001B0832 /* Main.storyboard */,
 				CE51B18626FB3E67001B0832 /* Assets.xcassets */,
 				CE51B18826FB3E67001B0832 /* LaunchScreen.storyboard */,
@@ -137,9 +140,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE51B18226FB3E62001B0832 /* ViewController.swift in Sources */,
+				CE51B18226FB3E62001B0832 /* ListViewController.swift in Sources */,
 				CE51B17E26FB3E62001B0832 /* AppDelegate.swift in Sources */,
 				CE51B18026FB3E62001B0832 /* SceneDelegate.swift in Sources */,
+				CE51B19226FB4D0E001B0832 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
