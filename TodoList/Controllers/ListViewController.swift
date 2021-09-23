@@ -17,8 +17,8 @@ class ListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadTask()
+  
+        fetchData()
     }
     
     //MARK: - Alert controller region
@@ -37,8 +37,7 @@ class ListViewController: UITableViewController {
         let action = UIAlertAction(title: "add", style: .default, handler: {(action) in
             let taskName = textField.text!.isEmpty ? K.defaultTaskName:textField.text!
             self.tasks.append(self.initTaskItem(taskName))
-            self.storeNewTask()
-            self.tableView.reloadData()
+            self.storeData()
         })
         alert.addAction(action)
         
@@ -53,18 +52,19 @@ class ListViewController: UITableViewController {
         return newTask
     }
     
-    func storeNewTask() {
+    func storeData() {
         do{
             try context.save()
+            tableView.reloadData()
         }catch{
             print(error)
         }
     }
 
-    func loadTask(){
-        let request : NSFetchRequest<Task> = Task.fetchRequest()
+    func fetchData(with request : NSFetchRequest<Task> = Task.fetchRequest()){
         do{
             tasks = try context.fetch(request)
+            tableView.reloadData()
         }catch{
             print(error)
         }
@@ -72,12 +72,12 @@ class ListViewController: UITableViewController {
 
     //MARK: - TableView
     
-    //tableview items coune (numberOfRowsInSection)
+    //Items count (numberOfRowsInSection)
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
     }
     
-    //tableview init cell (cellForRowAt)
+    //Init cell (cellForRowAt)
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: K.tableViewCellName, for: indexPath)
@@ -89,14 +89,41 @@ class ListViewController: UITableViewController {
         return cell
     }
     
-    //tableview on cell selected (didSelectRowAt)
+    //On cell selected (didSelectRowAt)
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tasks[indexPath.row].isCompleted = !tasks[indexPath.row].isCompleted
-        storeNewTask()
-        tableView.reloadData()
+        
+        //Important to save order of methods. Firstly remove from Core Data and only then from tasks array.
+        //Reason- we need firstly received Task object that stored in tasks array.
+        context.delete(tasks[indexPath.row])
+        tasks.remove(at: indexPath.row)
+
+        storeData()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+}
+
+extension ListViewController: UISearchBarDelegate{
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<Task> = Task.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        fetchData(with: request)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        if(searchBar.text?.count == 0){
+            fetchData()
+
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
 }

@@ -13,6 +13,6 @@ struct K {
     static let userDefaultsKey =  "TodoListArray"
 
     struct Segue {
-        static let openDetailsView = "TaskDetails"
+        static let openItemsView = "goToItems"
     }
 }

@@ -8,6 +8,25 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Category View Controller-->
+        <scene sceneID="jh2-uf-EjL">
+            <objects>
+                <viewController id="iOC-Ym-Ag1" customClass="CategoryViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DOI-e1-E8V">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="gVO-FI-6tK"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="eqW-Cz-YOH"/>
+                    <connections>
+                        <segue destination="77e-7a-gQl" kind="show" identifier="goToItems" id="Tjp-aT-1gf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YIk-sE-ejj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1028" y="65"/>
+        </scene>
         <!--Todo-->
         <scene sceneID="pkz-gL-X3u">
             <objects>
@@ -16,9 +35,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="9La-E6-nwY">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="77e-7a-gQl" id="zHR-a7-bLF"/>
+                            </connections>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ToDoItemCell" id="5Go-Zo-Gbl">
-                                <rect key="frame" x="0.0" y="24.5" width="414" height="43.5"/>
+                                <rect key="frame" x="0.0" y="68.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Go-Zo-Gbl" id="rpS-zL-bJQ">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -42,23 +69,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0cU-3J-ZaU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1459" y="73"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="uTU-lk-e9V">
-            <objects>
-                <viewController id="Hiu-WT-pBr" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="6g0-Ld-zzP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="SVS-zg-5g2"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="e3B-1P-lUW"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tBB-mG-cVb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2207" y="73"/>
+            <point key="canvasLocation" x="1729" y="65"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lZT-0p-iTD">
@@ -72,15 +83,18 @@
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="77e-7a-gQl" kind="relationship" relationship="rootViewController" id="BcY-0W-tAG"/>
+                        <segue destination="iOC-Ym-Ag1" kind="relationship" relationship="rootViewController" id="dQy-Om-fLp"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a6a-le-ou8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="742.02898550724649" y="72.991071428571431"/>
+            <point key="canvasLocation" x="293" y="65"/>
         </scene>
     </scenes>
     <resources>
