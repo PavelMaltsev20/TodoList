@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import CoreData
 
 class ListViewController: UITableViewController {
     
     var tasks = [Task]()
     let defaults = UserDefaults.standard
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Tasks.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate) .persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +33,10 @@ class ListViewController: UITableViewController {
             textField = alertTextField
         })
         
-        
         //adding action to alert
         let action = UIAlertAction(title: "add", style: .default, handler: {(action) in
             let taskName = textField.text!.isEmpty ? K.defaultTaskName:textField.text!
-            self.tasks.append(Task(title: taskName, isCompleted: false))
+            self.tasks.append(self.initTaskItem(taskName))
             self.storeNewTask()
             self.tableView.reloadData()
         })
@@ -45,29 +46,30 @@ class ListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    func initTaskItem(_ taskName: String) -> Task {
+        let newTask = Task(context: context)
+        newTask.title = taskName
+        newTask.isCompleted = false
+        return newTask
+    }
+    
     func storeNewTask() {
-        let encoder = PropertyListEncoder()
-        
         do{
-            let data = try encoder.encode(tasks)
-            try data.write(to: dataFilePath!)
+            try context.save()
         }catch{
             print(error)
         }
     }
-    
+
     func loadTask(){
-        if let data = try? Data(contentsOf: dataFilePath!){
-            let decoder = PropertyListDecoder()
-            do{
-                tasks = try decoder.decode([Task].self, from: data)
-            }catch{
-                print(error)
-            }
+        let request : NSFetchRequest<Task> = Task.fetchRequest()
+        do{
+            tasks = try context.fetch(request)
+        }catch{
+            print(error)
         }
-        
     }
-    
+
     //MARK: - TableView
     
     //tableview items coune (numberOfRowsInSection)
