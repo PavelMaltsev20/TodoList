@@ -8,17 +8,19 @@
 import UIKit
 import CoreData
 
-class ListViewController: UITableViewController {
+class TasksViewController: UITableViewController {
     
+    var selectedCategory: UserCategory?{
+        didSet{
+            fetchTasksData()
+        }
+    }
     var tasks = [Task]()
-    let defaults = UserDefaults.standard
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Tasks.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate) .persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
-  
-        fetchData()
+        
     }
     
     //MARK: - Alert controller region
@@ -49,27 +51,40 @@ class ListViewController: UITableViewController {
         let newTask = Task(context: context)
         newTask.title = taskName
         newTask.isCompleted = false
+        newTask.parentCategory = selectedCategory
         return newTask
     }
     
+    //MARK: - Core data
     func storeData() {
         do{
             try context.save()
-            tableView.reloadData()
         }catch{
             print(error)
         }
+        tableView.reloadData()
     }
-
-    func fetchData(with request : NSFetchRequest<Task> = Task.fetchRequest()){
+    
+    func fetchTasksData(with request : NSFetchRequest<Task> = Task.fetchRequest(),
+                        predicate: NSPredicate? = nil){
+        
+        
+        let categoryPredicate = NSPredicate(format: K.CoreData.categoryPredicate, selectedCategory!.title!)
+        
+        if let savePredicate = predicate{
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, savePredicate])
+        }else{
+            request.predicate = categoryPredicate
+        }
+        
         do{
             tasks = try context.fetch(request)
-            tableView.reloadData()
         }catch{
             print(error)
         }
+        tableView.reloadData()
     }
-
+    
     //MARK: - TableView
     
     //Items count (numberOfRowsInSection)
@@ -80,7 +95,7 @@ class ListViewController: UITableViewController {
     //Init cell (cellForRowAt)
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.tableViewCellName, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.Cells.taskCell, for: indexPath)
         let item = tasks[indexPath.row]
         
         cell.textLabel?.text = item.title
@@ -98,7 +113,7 @@ class ListViewController: UITableViewController {
         //Reason- we need firstly received Task object that stored in tasks array.
         context.delete(tasks[indexPath.row])
         tasks.remove(at: indexPath.row)
-
+        
         storeData()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -106,24 +121,25 @@ class ListViewController: UITableViewController {
     
 }
 
-extension ListViewController: UISearchBarDelegate{
+extension TasksViewController: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let request: NSFetchRequest<Task> = Task.fetchRequest()
+        let predicate = NSPredicate(format: K.CoreData.searchPredicate, searchBar.text!)
         
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        fetchData(with: request)
+        fetchTasksData(with: request, predicate: predicate)
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if(searchBar.text?.count == 0){
-            fetchData()
-
+            fetchTasksData()
+            
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
         }
     }
+    
 }
