@@ -6,15 +6,14 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryViewController: UITableViewController {
     
-    let context = (UIApplication.shared.delegate as! AppDelegate) .persistentContainer.viewContext
-    var categories = [UserCategory]()
+    let realm = try! Realm()
+    var categories: Results<Category>?
     
     override func viewDidLoad() {
-        
         fetchData()
     }
     
@@ -32,8 +31,7 @@ class CategoryViewController: UITableViewController {
         //adding action to alert
         let action = UIAlertAction(title: "add", style: .default, handler: {(action) in
             let categoryName = textField.text!.isEmpty ? K.defaultCategoryName:textField.text!
-            self.categories.append(self.initCategory(categoryName))
-            self.storeData()
+            self.storeData(category: self.initCategory(categoryName))
         })
         alert.addAction(action)
         
@@ -41,17 +39,19 @@ class CategoryViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func initCategory(_ name: String) -> UserCategory {
-        let category = UserCategory(context: context)
+    func initCategory(_ name: String) -> Category {
+        let category = Category()
         category.title = name
         return category
     }
     
     
-    //MARK: - Managing Core Data
-    func storeData(){
+    //MARK: - Managing Realm
+    func storeData(category: Category){
         do {
-            try context.save()
+            try realm.write{
+                realm.add(category)
+            }
         } catch  {
             print(error)
         }
@@ -59,26 +59,22 @@ class CategoryViewController: UITableViewController {
     }
     
     
-    func fetchData(with request : NSFetchRequest<UserCategory> = UserCategory.fetchRequest()){
-        do{
-            categories = try context.fetch(request)
-        }catch{
-            print(error)
-        }
+    func fetchData(){
+        categories = realm.objects(Category.self)
         tableView.reloadData()
     }
     
     
     //MARK: - TableView
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return categories?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.Cells.categoryCell, for: indexPath)
-        let item = categories[indexPath.row]
+        let item = categories?[indexPath.row]
         
-        cell.textLabel?.text = item.title
+        cell.textLabel?.text = item?.title ?? "No categories added yet"
         
         return cell
     }
@@ -92,7 +88,7 @@ class CategoryViewController: UITableViewController {
         let destinationVC = segue.destination as! TasksViewController
 
         if let index = tableView.indexPathForSelectedRow{
-            destinationVC.selectedCategory = categories[index.row]
+            destinationVC.selectedCategory = categories?[index.row]
         }
     }
     

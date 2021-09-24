@@ -9,5 +9,6 @@ import Foundation
 import RealmSwift
 
 class Category: Object {
-    <#code#>
+    @objc dynamic var title: String = ""
+    let tasks = List<Task>()
 }

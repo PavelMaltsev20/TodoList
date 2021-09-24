@@ -11,4 +11,5 @@ import RealmSwift
 class Task: Object {
     @objc dynamic var title: String = ""
     @objc dynamic var isComlete: Bool = false
+    var parentCategory = LinkingObjects(fromType: Category.self, property: "tasks")
 }
