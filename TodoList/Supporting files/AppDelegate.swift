@@ -16,10 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         do {
             let realm = try Realm()
+        
         } catch  {
             print(error)
         }
-        
         
         
         return true
