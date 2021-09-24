@@ -10,7 +10,6 @@ import Foundation
 struct K {
     static let defaultTaskName = "New task created"
     static let defaultCategoryName = "New category created"
-    static let userDefaultsKey =  "TodoListArray"
     
     struct Segue{
         static let openTasksView = "openTasksView"
@@ -21,8 +20,7 @@ struct K {
         static let taskCell = "tasksCell"
     }
     
-    struct CoreData {
-        static let categoryPredicate = "parentCategory.title MATCHES %@"
-        static let searchPredicate = "title CONTAINS[cd] %@"
+    struct Predict {
+        static let searchByTitle = "title CONTAINS[cd] %@"
     }
 }

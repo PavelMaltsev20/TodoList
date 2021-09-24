@@ -48,6 +48,7 @@ class TasksViewController: UITableViewController {
                 try self.realm.write{
                     let newTask = Task()
                     newTask.title = task
+                    newTask.dateCreated = Date()
                     category.tasks.append(newTask)
                 }
             }catch  {
@@ -55,7 +56,7 @@ class TasksViewController: UITableViewController {
             }
             
             tableView.reloadData()
-        }
+                        }
     }
     
     func fetchTasksData(){
@@ -74,9 +75,10 @@ class TasksViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: K.Cells.taskCell, for: indexPath)
+        
         if let item = tasks?[indexPath.row]{
             cell.textLabel?.text = item.title
-            cell.accessoryType = item.isComlete ? .checkmark : .none
+            cell.accessoryType = item.isComlete ? .checkmark    : .none
         }else{
             cell.textLabel?.text = "No items added"
         }
@@ -86,31 +88,45 @@ class TasksViewController: UITableViewController {
     
     //On cell selected (didSelectRowAt)
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tasks?[indexPath.row].isComlete = !(tasks?[indexPath.row].isComlete ?? false)
-        tableView.deselectRow(at: indexPath, animated: true)
+        if let item = tasks?[indexPath.row]{
+            do {
+                try realm.write{
+                    item.isComlete = !item.isComlete
+                    tableView.reloadData()
+
+                }
+            } catch  {
+                print(error)
+            }
+        }
     }
     
 }
 
-//extension TasksViewController: UISearchBarDelegate{
-//
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+extension TasksViewController: UISearchBarDelegate{
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        tasks = tasks?.filter(K.Predict.searchByTitle, searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        
+        tableView.reloadData()
+        
+//        Core data query
 //        let request: NSFetchRequest<Task> = Task.fetchRequest()
 //        let predicate = NSPredicate(format: K.CoreData.searchPredicate, searchBar.text!)
 //
 //        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
 //
 //        fetchTasksData(with: request, predicate: predicate)
-//    }
-//
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if(searchBar.text?.count == 0){
-//            fetchTasksData()
-//
-//            DispatchQueue.main.async {
-//                searchBar.resignFirstResponder()
-//            }
-//        }
-//    }
-//
-//}
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if(searchBar.text?.count == 0){
+            fetchTasksData()
+
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+
+}
