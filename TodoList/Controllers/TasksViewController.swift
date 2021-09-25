@@ -7,14 +7,46 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class TasksViewController: SwipeTableViewController {
     
+    @IBOutlet weak var addBtn: UIBarButtonItem!
+    @IBOutlet weak var searchBar: UISearchBar!
     var tasks: Results<Task>?
     let realm = try! Realm()
     var selectedCategory: Category?{
         didSet{
             fetchTasksData()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavigationBar()
+    }
+    
+    func setNavigationBar() {
+        if let category = selectedCategory{
+            if let navBar = navigationController?.navigationBar{
+                let primaryColor = UIColor.init(hexString: category.color)!
+                let onPrimaryColor = UIColor(contrastingBlackOrWhiteColorOn: primaryColor, isFlat: true)
+                title = category.title
+
+                navBar.backgroundColor = primaryColor
+                navBar.barTintColor = primaryColor
+                navBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: onPrimaryColor]
+                navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: onPrimaryColor]
+                searchBar.barTintColor = primaryColor
+                view.backgroundColor = primaryColor
+
+                navBar.tintColor = onPrimaryColor
+                searchBar.tintColor = onPrimaryColor
+                addBtn.tintColor = onPrimaryColor
+                searchBar.searchTextField.textColor = onPrimaryColor
+
+
+            }
         }
     }
     
@@ -60,7 +92,7 @@ class TasksViewController: SwipeTableViewController {
     }
     
     func fetchTasksData(){
-        tasks = selectedCategory?.tasks.sorted(byKeyPath: "isComlete", ascending: true)
+        tasks = selectedCategory?.tasks.sorted(byKeyPath: "dateCreated", ascending: true)
         tableView.reloadData()
     }
     
@@ -96,8 +128,14 @@ class TasksViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = tasks?[indexPath.row]{
+            if let color = UIColor.init(hexString: selectedCategory!.color)!.darken(byPercentage: (CGFloat(indexPath.row) / CGFloat(tasks!.count))){
+                cell.backgroundColor = color
+                cell.tintColor = UIColor.init(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+                cell.textLabel?.textColor = UIColor.init(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+            }
+            
             cell.textLabel?.text = item.title
-            cell.accessoryType = item.isComlete ? .checkmark    : .none
+            cell.accessoryType = item.isComlete ? .checkmark : .none
         }else{
             cell.textLabel?.text = "No items added"
         }

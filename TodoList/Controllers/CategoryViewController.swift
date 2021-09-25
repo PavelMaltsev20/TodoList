@@ -19,6 +19,19 @@ class CategoryViewController: SwipeTableViewController {
         fetchData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let navBar = navigationController?.navigationBar{
+                        
+            navBar.backgroundColor = UIColor.flatPurpleDark()
+            navBar.barTintColor = UIColor.flatPurpleDark()
+            view.backgroundColor = UIColor.flatPurpleDark()
+
+            navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            navBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        }
+    }
+    
     @IBAction func addBtnPressed(_ sender: UIBarButtonItem) {
         //init alert
         let alert = UIAlertController(title: "Add new category", message: "", preferredStyle: .alert)
@@ -44,6 +57,7 @@ class CategoryViewController: SwipeTableViewController {
     func initCategory(_ name: String) -> Category {
         let category = Category()
         category.title = name
+        category.color = String("\(UIColor.randomFlat().hexValue())")
         return category
     }
     
@@ -92,10 +106,15 @@ class CategoryViewController: SwipeTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        let item = categories?[indexPath.row]
         
-        cell.textLabel?.text = item?.title ?? "No categories added yet"
-        cell.backgroundColor = UIColor.randomFlat()
+        if let item = categories?[indexPath.row]{
+            cell.textLabel?.text = item.title
+            cell.backgroundColor = UIColor.init(hexString: item.color)
+            
+            cell.textLabel?.textColor = UIColor.init(contrastingBlackOrWhiteColorOn: UIColor.init(hexString: item.color) ?? UIColor.black, isFlat: true)
+        }else{
+            cell.textLabel?.text = "No categories added yet"
+        }
         
         return cell
     }
