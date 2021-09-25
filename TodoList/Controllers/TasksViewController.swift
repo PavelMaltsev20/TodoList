@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class TasksViewController: UITableViewController {
+class TasksViewController: SwipeTableViewController {
     
     var tasks: Results<Task>?
     let realm = try! Realm()
@@ -41,7 +41,7 @@ class TasksViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    //MARK: - Core data
+    //MARK: - Realm data
     func storeData(task: String) {
         if let category = selectedCategory{
             do {
@@ -60,9 +60,28 @@ class TasksViewController: UITableViewController {
     }
     
     func fetchTasksData(){
-        tasks = selectedCategory?.tasks.sorted(byKeyPath: "title", ascending: true)
+        tasks = selectedCategory?.tasks.sorted(byKeyPath: "isComlete", ascending: true)
         tableView.reloadData()
     }
+    
+    func deleteData(delete task: Task){
+        do{
+            try realm.write{
+                realm.delete(task)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    
+    //MARK: - Overriding methods
+    override func deleteDataAt(at indexPath: IndexPath){
+        if let task = tasks?[indexPath.row]{
+            deleteData(delete: task)
+        }
+    }
+    
     
     //MARK: - TableView
     
@@ -74,7 +93,7 @@ class TasksViewController: UITableViewController {
     //Init cell (cellForRowAt)
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.Cells.taskCell, for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = tasks?[indexPath.row]{
             cell.textLabel?.text = item.title
@@ -103,6 +122,8 @@ class TasksViewController: UITableViewController {
     
 }
 
+
+//MARK: - Search section
 extension TasksViewController: UISearchBarDelegate{
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

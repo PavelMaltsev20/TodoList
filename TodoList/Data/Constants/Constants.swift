@@ -10,14 +10,10 @@ import Foundation
 struct K {
     static let defaultTaskName = "New task created"
     static let defaultCategoryName = "New category created"
-    
+    static let cell = "Cell"
+
     struct Segue{
         static let openTasksView = "openTasksView"
-    }
-
-    struct Cells {
-        static let categoryCell = "categoriesCell"
-        static let taskCell = "tasksCell"
     }
     
     struct Predict {

@@ -8,12 +8,13 @@
 import UIKit
 import RealmSwift
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     var categories: Results<Category>?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         fetchData()
     }
     
@@ -64,6 +65,24 @@ class CategoryViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    func deleteData(delete category: Category){
+        do{
+            try realm.write{
+                realm.delete(category)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    
+    //MARK: - Overriding methods
+    override func deleteDataAt(at indexPath: IndexPath){
+        if let category = categories?[indexPath.row]{
+            deleteData(delete: category)
+        }
+    }
+    
     
     //MARK: - TableView
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,7 +90,7 @@ class CategoryViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.Cells.categoryCell, for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let item = categories?[indexPath.row]
         
         cell.textLabel?.text = item?.title ?? "No categories added yet"
@@ -79,14 +98,15 @@ class CategoryViewController: UITableViewController {
         return cell
     }
     
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: K.Segue.openTasksView, sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
+    //the segue of new view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! TasksViewController
-
+        
         if let index = tableView.indexPathForSelectedRow{
             destinationVC.selectedCategory = categories?[index.row]
         }

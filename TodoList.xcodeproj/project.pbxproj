@@ -17,6 +17,7 @@
 		CE51B18A26FB3E67001B0832 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE51B18826FB3E67001B0832 /* LaunchScreen.storyboard */; };
 		CE51B19226FB4D0E001B0832 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE51B19126FB4D0E001B0832 /* Constants.swift */; };
 		CEA8D9A226FCCFA80086A955 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA8D9A126FCCFA80086A955 /* Data.swift */; };
+		CEC4E7E426FF55EB00C5FB68 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4E7E326FF55EB00C5FB68 /* SwipeTableViewController.swift */; };
 		CED9158C26FE30DC005C6331 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED9158B26FE30DC005C6331 /* Task.swift */; };
 		CED9158E26FE30E4005C6331 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED9158D26FE30E4005C6331 /* Category.swift */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		CE51B18B26FB3E67001B0832 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE51B19126FB4D0E001B0832 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		CEA8D9A126FCCFA80086A955 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		CEC4E7E326FF55EB00C5FB68 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		CED9158B26FE30DC005C6331 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		CED9158D26FE30E4005C6331 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +120,7 @@
 		CE51B19726FB723B001B0832 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				CEC4E7E326FF55EB00C5FB68 /* SwipeTableViewController.swift */,
 				CE492B3B26FCA6BB00E1D4CE /* CategoryViewController.swift */,
 				CE51B18126FB3E62001B0832 /* TasksViewController.swift */,
 			);
@@ -288,6 +291,7 @@
 				CEA8D9A226FCCFA80086A955 /* Data.swift in Sources */,
 				CE51B18226FB3E62001B0832 /* TasksViewController.swift in Sources */,
 				CE51B17E26FB3E62001B0832 /* AppDelegate.swift in Sources */,
+				CEC4E7E426FF55EB00C5FB68 /* SwipeTableViewController.swift in Sources */,
 				CED9158E26FE30E4005C6331 /* Category.swift in Sources */,
 				CE51B18026FB3E62001B0832 /* SceneDelegate.swift in Sources */,
 				CE492B3C26FCA6BB00E1D4CE /* CategoryViewController.swift in Sources */,
